@@ -123,6 +123,7 @@ JSExamples Page Stylesheet
     font-size: 14px;
     min-height: 400px;
     max-height: 400px;
+    min-width: 600px;
 }
 
 #output-frame {
