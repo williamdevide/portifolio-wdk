@@ -66,6 +66,8 @@ JSTester Page Stylesheet
     border-top: none;
     border-radius: 0 0 .25rem .25rem;
     font-size: 14px;
+    min-height: 350px;
+    max-height: 350px;
 }
 
 /* --- Controles e Iframe de Visualização --- */
@@ -85,7 +87,8 @@ JSTester Page Stylesheet
     border: 1px solid #dee2e6;
     border-radius: .25rem;
     background-color: #fff;
-    min-height: 500px;
+    min-height: 400px;
+    max-height: 400px;
     /* Estilos para o zoom */
     transform-origin: top left;
     transition: transform 0.2s ease-in-out;
