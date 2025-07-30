@@ -25,3 +25,4 @@ function mudarCor() {
   }
   
   document.body.style.backgroundColor = novaCor;
+}

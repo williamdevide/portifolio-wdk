@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                                     </div>
                                 </div>
                                 <div class="output-frame-wrapper">
-                                    <iframe class= "output-frame-exampleId" id="output-frame-${exampleId}" title="Resultado do Código"></iframe>
+                                    <iframe class="output-frame-exampleId" id="output-frame-${exampleId}" title="Resultado do Código"></iframe>
                                 </div>
                             </div>
                         </div>
