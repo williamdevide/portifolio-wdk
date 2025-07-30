@@ -1,0 +1,22 @@
+body {
+    font-family: sans-serif;
+    transition: background-color 0.5s;
+  }
+  
+  h1 {
+    color: steelblue;
+  }
+  
+  button {
+    padding: 10px 15px;
+    border: none;
+    background-color: steelblue;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: darkslateblue;
+  }
+  

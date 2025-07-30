@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>William Devidé Komel - Desenvolvedor & Instrutor</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="./css/global.css" />
+    
+    <!-- Page Specific Styles -->
+    <link rel="stylesheet" href="./css/index.css" />
+    <link rel="stylesheet" href="./css/contact.css" />
+
+  </head>
+  <body>
+
+    <!-- Top Fixed Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand logo" href="#">WDK</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#news">Notícias</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#projects">Projetos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#skills">Competências</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#courses">Cursos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#resources">Recursos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">Sobre</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <header class="hero-container transition-container">
+      <div class="background-image"></div>
+      <div class="content-overlay">
+        <div class="container-fluid d-flex flex-column h-100 justify-content-center">
+            <section class="hero-section text-center">
+              <div class="row justify-content-center">
+                <div class="col-md-10 col-lg-8">
+                  <h1 class="hero-title fade-in-text">William Devidé Komel</h1>
+                  <h2 class="hero-subtitle fade-in-text">Desenvolvedor Full Stack & Instrutor de Tecnologia</h2>
+                </div>
+              </div>
+              
+              <!-- Navigation Cards -->
+              <div class="hero-nav-options d-flex justify-content-center align-items-center flex-wrap">
+                  <a href="#projects" class="hero-nav-card" style="background-image: url('https://images.unsplash.com/photo-1556740738-b6a63e27c4df?q=80&w=2070&auto=format&fit=crop');">
+                      <span>PROJETOS</span>
+                  </a>
+                  <a href="#skills" class="hero-nav-card" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop');">
+                      <span>COMPETÊNCIAS</span>
+                  </a>
+                  <a href="#courses" class="hero-nav-card" style="background-image: url('https://images.unsplash.com/photo-1542744095-291d1f67b221?q=80&w=2070&auto=format&fit=crop');">
+                      <span>CURSOS</span>
+                  </a>
+                  <a href="#resources" class="hero-nav-card" style="background-image: url('https://images.unsplash.com/photo-1504639725590-34d0984388bd?q=80&w=1974&auto=format&fit=crop');">
+                      <span>RECURSOS</span>
+                  </a>
+                  <a href="#about" class="hero-nav-card" style="background-image: url('./assets/img/backgrounds/about-novo.png');">
+                      <span>SOBRE</span>
+                  </a>
+              </div>
+
+            </section>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Sections -->
+    <main>
+        <!-- News Section -->
+        <section id="news" class="page-section bg-light text-center py-5">
+            <div class="container">
+                <h2 class="section-title">Últimas Notícias</h2>
+                <p class="section-subtitle mb-5">Novidades sobre projetos, cursos e eventos.</p>
+                <div class="text-start">
+                    <p><strong>29/07/2025:</strong> Início da nova turma do curso de Cibersegurança no SENAI.</p>
+                    <p><strong>15/07/2025:</strong> Conclusão do projeto de migração de dados para a empresa X.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="page-section text-center py-5">
+            <div class="container">
+                <h2 class="section-title">Projetos em Destaque</h2>
+                <p class="section-subtitle mb-5">Cases de desenvolvimento e soluções de negócio.</p>
+                <div class="row">
+                    <!-- Project Card 1 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Desenvolvimento de ERP</h5>
+                                <p class="card-text">Construção de um sistema ERP completo com framework próprio, atuando como Desenvolvedor Full Stack.</p>
+                                <a href="./pages/project-erp.html" class="btn btn-outline-primary transition-link">Ver Detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Card 2 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Soluções de IoT</h5>
+                                <p class="card-text">Análise de requisitos e gestão de backlog como Product Owner para projetos de IoT e climatização de precisão.</p>
+                                <a href="./pages/project-iot.html" class="btn btn-outline-primary transition-link">Ver Detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Card 3 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Pipeline de ETL</h5>
+                                <p class="card-text">Desenvolvimento de pipelines de ETL com Python e SQL para integração de dados e geração de relatórios.</p>
+                                <a href="./pages/project-etl.html" class="btn btn-outline-primary transition-link">Ver Detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="page-section bg-light text-center py-5">
+            <div class="container">
+                <h2 class="section-title">Competências Técnicas</h2>
+                <p class="section-subtitle mb-5">Ferramentas e tecnologias que utilizo para criar soluções.</p>
+                <!-- Placeholder for skills grid -->
+                <p>Python, Java, JavaScript, TypeScript, SQL, Power BI, SAP, JIRA, Metodologias Ágeis...</p>
+            </div>
+        </section>
+
+        <!-- Courses Section -->
+        <section id="courses" class="page-section text-center py-5">
+            <div class="container">
+                <h2 class="section-title">Cursos e Disciplinas</h2>
+                <p class="section-subtitle mb-5">Compartilhando conhecimento como instrutor.</p>
+                <div class="row">
+                    <!-- Cards de Cursos aqui -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section id="resources" class="page-section bg-light text-center py-5">
+            <div class="container">
+                <h2 class="section-title">Recursos e Ferramentas</h2>
+                <p class="section-subtitle mb-5">Ferramentas úteis e recursos para desenvolvedores.</p>
+                <div class="row justify-content-center">
+                    <!-- Resource Card 1 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" class="card-img-top resource-card-img" alt="JavaScript Logo">
+                            <div class="card-body">
+                                <h5 class="card-title">JSTester</h5>
+                                <p class="card-text">Plataforma para exemplos e testes de JavaScript.</p>
+                                <a href="./pages/jstester.html" class="btn btn-outline-primary transition-link">Acessar Ferramenta</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Resource Card 2 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" class="card-img-top resource-card-img" alt="JavaScript Logo">
+                            <div class="card-body">
+                                <h5 class="card-title">JSExamples</h5>
+                                <p class="card-text">Galeria de exemplos de código interativos.</p>
+                                <a href="./pages/jsexamples.html" class="btn btn-outline-primary transition-link">Ver Exemplos</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- About Section -->
+        <section id="about" class="page-section text-center py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <h2 class="section-title">Sobre Mim</h2>
+                        <img src="./assets/img/william.jfif" class="rounded-circle my-4" alt="William Devidé Komel" width="150" height="150">
+                        <p class="lead">Com mais de 20 anos de experiência, traduzo desafios de negócio em soluções de software robustas e inovadoras. Hoje, além de desenvolver projetos de alto impacto em ERP e IoT, compartilho meu conhecimento para formar as futuras gerações de tecnólogos.</p>
+                        <p class="lead mt-3">Sou um desenvolvedor apaixonado por resolver problemas complexos com tecnologia. Minha jornada de mais de duas décadas me permitiu liderar projetos desafiadores e, mais recentemente, me deu a oportunidade de formar novos talentos, uma atividade que considero extremamente gratificante.</p>
+                        <a href="./assets/cv/cv_williamdevidekomel_2025.pdf" class="btn btn-primary mt-4" target="_blank" download>Baixar Currículo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Social Media Icons -->
+    <div class="social-medias">
+        <a href="https://www.linkedin.com/in/williamdevide" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+        <a href="https://github.com/williamdevide" target="_blank" title="GitHub"><i class="bi bi-github"></i></a>
+        <a href="mailto:williamdevide@gmail.com" title="Email"><i class="bi bi-envelope-fill"></i></a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer bg-dark text-white text-center py-4">
+        <div class="container">
+            <div class="social-links mb-3">
+                <a href="https://www.linkedin.com/in/williamdevide" target="_blank" class="text-white mx-2">LinkedIn</a>
+                <a href="https://github.com/williamdevide" target="_blank" class="text-white mx-2">GitHub</a>
+            </div>
+            <p class="mb-0">&copy; 2024 William Devidé Komel. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <!-- General Scripts -->
+    <script src="./js/scripts.js"></script>
+  </body>
+</html>

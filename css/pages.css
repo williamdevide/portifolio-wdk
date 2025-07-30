@@ -1,0 +1,53 @@
+/*
+==================================================
+Internal Pages Stylesheet
+==================================================
+*/
+
+/* --- Estilo do Cabeçalho Padrão para Páginas Internas --- */
+.page-header {
+    background-color: var(--dark-color);
+    color: var(--text-color-light);
+    padding: 60px 0; /* Padding reduzido */
+    margin-top: 56px; /* Compensa a altura da navbar fixa */
+    text-align: center;
+}
+
+.page-header .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.page-header .header-logo {
+    height: 50px;
+    width: auto;
+}
+
+.page-header .header-text {
+    text-align: left;
+}
+
+
+/* Ajusta as cores dos títulos e subtítulos para o fundo escuro */
+.page-header .section-title,
+.page-header .section-subtitle {
+    color: var(--text-color-light);
+    margin: 0;
+}
+
+.page-header .section-title {
+    font-size: 2.2rem;
+}
+
+.page-header .section-subtitle {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 1rem;
+}
+
+/* --- Ajusta o espaçamento do conteúdo principal --- */
+main.container-fluid {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}

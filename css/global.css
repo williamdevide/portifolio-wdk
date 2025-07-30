@@ -1,0 +1,147 @@
+/*
+==================================================
+Global Stylesheet
+==================================================
+*/
+
+/* --- Variáveis de Cor e Fonte --- */
+:root {
+  --primary-color: #0d6efd; /* Azul primário do Bootstrap, para consistência */
+  --secondary-color: #6c757d; /* Cinza secundário */
+  --dark-color: #212529; /* Cor escura principal (para fundos, texto) */
+  --light-color: #f8f9fa; /* Cor clara (para fundos de seção, texto sobre fundo escuro) */
+  --text-color: #343a40; /* Cor de texto padrão para fundos claros */
+  --text-color-light: #ffffff; /* Cor de texto para fundos escuros */
+  
+  --font-primary: 'Poppins', sans-serif; /* Para títulos e elementos de destaque */
+  --font-secondary: 'Roboto', sans-serif; /* Para corpo de texto e parágrafos */
+}
+
+/* --- Estilos Base do Body --- */
+body {
+  font-family: var(--font-secondary);
+  color: var(--text-color);
+  background-color: var(--light-color);
+  padding-top: 56px; /* Altura da navbar fixa para evitar que o conteúdo fique atrás dela */
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+/* Classe para animação de saída */
+body.fade-out {
+    opacity: 0;
+}
+
+/* --- Configuração de Rolagem Suave --- */
+html {
+  scroll-behavior: smooth;
+}
+
+/* --- Estilos da Barra de Navegação (Comum a todas as páginas) --- */
+.navbar.fixed-top {
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Classe para ser adicionada via JS quando o usuário rolar a página (na index) */
+.navbar-scrolled {
+    background-color: var(--dark-color) !important;
+}
+
+.navbar .logo {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+.navbar .nav-link {
+    font-weight: 600;
+    margin: 0 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.navbar .nav-link:hover {
+    color: var(--primary-color);
+}
+
+
+/* --- Estilos Gerais para Seções --- */
+.page-section {
+  padding: 80px 0;
+}
+
+.page-section.bg-light {
+    background-color: var(--light-color) !important;
+}
+
+.page-section.bg-dark {
+    background-color: var(--dark-color) !important;
+    color: var(--text-color-light);
+}
+
+.section-title {
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--dark-color);
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Estilos para os Cards --- */
+.card {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.card .card-title {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* --- Estilos para Botões --- */
+.btn-outline-primary {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+}
+
+/* --- Animações e Transições --- */
+.transition-container {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in-text {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1.5s ease, transform 1.5s ease;
+}

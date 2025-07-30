@@ -1,0 +1,46 @@
+/*
+==================================================
+Contact Icons Stylesheet
+==================================================
+*/
+
+.social-medias {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 10px;
+    background-color: rgba(33, 37, 41, 0.7); /* bg-dark com transparência */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    z-index: 1050; /* Z-index alto para ficar sobre todo o conteúdo */
+    backdrop-filter: blur(8px); /* Efeito de vidro fosco */
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.social-medias a {
+    color: var(--text-color-light);
+    font-size: 24px; /* Tamanho do ícone */
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.social-medias a:hover {
+    color: var(--primary-color);
+    transform: scale(1.2);
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .social-medias {
+        bottom: 15px;
+        right: 15px;
+        padding: 12px 8px;
+        gap: 12px;
+    }
+    .social-medias a {
+        font-size: 20px;
+    }
+}
