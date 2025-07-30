@@ -4,10 +4,14 @@ JSExamples Page Stylesheet
 ==================================================
 */
 
-/* --- Filter Styles --- */
+/* --- Filter & Search Styles --- */
 #filter-container .btn {
     border-radius: 20px;
     font-weight: 600;
+}
+
+#search-input {
+    border-radius: 20px;
 }
 
 /* --- Estilos da Grelha de Cards --- */

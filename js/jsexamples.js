@@ -1,8 +1,11 @@
 document.addEventListener('DOMContentLoaded', async function() {
     const examplesContainer = document.getElementById('examples-container');
     const filterContainer = document.getElementById('filter-container');
+    const searchInput = document.getElementById('search-input');
     let editors = {};
-    let allExamplesData = []; // Armazena todos os exemplos para filtragem
+    let allExamplesData = [];
+    let activeKeyword = 'Todos';
+    let searchTerm = '';
 
     // Função para buscar os dados dos exemplos do ficheiro JSON
     async function getExamplesData() {
@@ -13,7 +16,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                 return [];
             }
             const data = await response.json();
-            // Ordena os exemplos em ordem alfabética pelo nome
             return (data.examples || []).sort((a, b) => a.name.localeCompare(b.name));
         } catch (error) {
             console.error('Erro ao ler o ficheiro examples.json:', error);
@@ -32,10 +34,36 @@ document.addEventListener('DOMContentLoaded', async function() {
             return '';
         }
     }
+    
+    // Função para aplicar os filtros e a pesquisa
+    function applyFilters() {
+        let filteredExamples = allExamplesData;
+
+        // 1. Filtra por palavra-chave ativa
+        if (activeKeyword !== 'Todos') {
+            filteredExamples = filteredExamples.filter(ex => ex.keywords.includes(activeKeyword));
+        }
+
+        // 2. Filtra pelo termo de pesquisa
+        if (searchTerm) {
+            filteredExamples = filteredExamples.filter(ex => {
+                const searchLower = searchTerm.toLowerCase();
+                const nameMatch = ex.name.toLowerCase().includes(searchLower);
+                const keywordMatch = ex.keywords.some(kw => kw.toLowerCase().includes(searchLower));
+                return nameMatch || keywordMatch;
+            });
+        }
+        
+        renderCards(filteredExamples);
+    }
 
     // Função para renderizar os cards na tela
     function renderCards(examplesToRender) {
-        examplesContainer.innerHTML = ''; // Limpa o container
+        examplesContainer.innerHTML = '';
+        if (examplesToRender.length === 0) {
+            examplesContainer.innerHTML = '<p class="text-center text-muted">Nenhum exemplo corresponde aos seus critérios de pesquisa.</p>';
+            return;
+        }
         examplesToRender.forEach((exampleData, index) => {
             createExampleBlock(exampleData, index);
         });
@@ -48,20 +76,19 @@ document.addEventListener('DOMContentLoaded', async function() {
             example.keywords.forEach(keyword => allKeywords.add(keyword));
         });
 
-        filterContainer.innerHTML = ''; // Limpa os filtros
+        filterContainer.innerHTML = '';
         
-        // Botão "Todos"
         const allButton = document.createElement('button');
         allButton.className = 'btn btn-primary';
         allButton.textContent = 'Todos';
         allButton.addEventListener('click', () => {
             document.querySelectorAll('#filter-container .btn').forEach(btn => btn.classList.remove('btn-primary'));
             allButton.classList.add('btn-primary');
-            renderCards(allExamplesData);
+            activeKeyword = 'Todos';
+            applyFilters();
         });
         filterContainer.appendChild(allButton);
 
-        // Botões de palavras-chave
         Array.from(allKeywords).sort().forEach(keyword => {
             const button = document.createElement('button');
             button.className = 'btn btn-outline-primary';
@@ -69,12 +96,18 @@ document.addEventListener('DOMContentLoaded', async function() {
             button.addEventListener('click', () => {
                 document.querySelectorAll('#filter-container .btn').forEach(btn => btn.classList.remove('btn-primary'));
                 button.classList.add('btn-primary');
-                const filteredExamples = allExamplesData.filter(ex => ex.keywords.includes(keyword));
-                renderCards(filteredExamples);
+                activeKeyword = keyword;
+                applyFilters();
             });
             filterContainer.appendChild(button);
         });
     }
+
+    // Adiciona o "ouvinte" para a caixa de pesquisa
+    searchInput.addEventListener('input', (e) => {
+        searchTerm = e.target.value.trim();
+        applyFilters();
+    });
 
     // Função para criar e inicializar um bloco de exemplo
     async function createExampleBlock(exampleData, index) {
@@ -89,8 +122,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const wrapper = document.createElement('div');
         wrapper.className = 'col-lg-4 col-md-6 mb-4 example-card-wrapper';
         wrapper.id = `wrapper-${exampleId}`;
-        wrapper.dataset.keywords = keywords.join(',');
-
+        
         wrapper.innerHTML = `
             <div class="card h-100 shadow-sm example-card">
                 <div class="card-img-wrapper"><iframe scrolling="no"></iframe></div>
@@ -100,7 +132,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     <button class="btn btn-primary mt-auto expand-btn">Expandir</button>
                 </div>
             </div>
-            <div class="example-expanded-view">...</div>
+            <div class="example-expanded-view"></div>
         `;
         examplesContainer.appendChild(wrapper);
 
@@ -111,7 +143,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         previewDoc.close();
 
         wrapper.querySelector('.expand-btn').addEventListener('click', () => {
-            // Lógica de expansão
             expandView(wrapper, exampleId, name, htmlContent, cssContent, jsContent);
         });
     }
