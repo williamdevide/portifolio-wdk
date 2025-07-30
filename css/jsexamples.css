@@ -4,6 +4,12 @@ JSExamples Page Stylesheet
 ==================================================
 */
 
+/* --- Filter Styles --- */
+#filter-container .btn {
+    border-radius: 20px;
+    font-weight: 600;
+}
+
 /* --- Estilos da Grelha de Cards --- */
 .example-card-wrapper {
     transition: all 0.5s ease-in-out;
@@ -101,7 +107,6 @@ JSExamples Page Stylesheet
     border-radius: 0 0 .25rem .25rem;
     font-size: 14px;
     min-height: 400px;
-    max-height: 400px;
 }
 
 .output-frame-wrapper {
@@ -110,20 +115,6 @@ JSExamples Page Stylesheet
     border: 1px solid #dee2e6;
     border-radius: .25rem;
     min-height: 400px;
-    max-height: 400px;
-
-}
-
-.output-frame-full {
-    flex-grow: 1;
-    height: 100%;
-    border: 1px solid #dee2e6;
-    border-top: none;
-    border-radius: 0 0 .25rem .25rem;
-    font-size: 14px;
-    min-height: 400px;
-    max-height: 400px;
-    min-width: 600px;
 }
 
 #output-frame {

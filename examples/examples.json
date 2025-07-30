@@ -1,7 +1,14 @@
 {
-    "folders": [
-      "exemplo-01",
-      "exemplo-02"
-    ]
-  }
-  
+  "examples": [
+    {
+      "folder": "exemplo-01",
+      "name": "Olá Mundo Interativo",
+      "keywords": ["DOM", "Básico"]
+    },
+    {
+      "folder": "exemplo-02",
+      "name": "Login Psicodélico",
+      "keywords": ["DOM", "Funções", "Eventos", "Login"]
+    }
+  ]
+}
