@@ -38,6 +38,7 @@ JSExamples Page Stylesheet
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.5rem;
+    min-height: 38px; /* Altura mínima para alinhar com os botões */
 }
 
 .editor-tabs .nav-link {
@@ -65,7 +66,8 @@ JSExamples Page Stylesheet
 }
 
 .CodeMirror {
-    height: 400px; /* Altura fixa para o editor */
+    flex-grow: 1;
+    height: 100%;
     border: 1px solid #dee2e6;
     border-top: none;
     border-radius: 0 0 .25rem .25rem;
@@ -87,6 +89,7 @@ JSExamples Page Stylesheet
     overflow: auto;
     border: 1px solid #dee2e6;
     border-radius: .25rem;
+    min-height: 400px; /* Altura mínima para o iframe */
 }
 
 #output-frame {
