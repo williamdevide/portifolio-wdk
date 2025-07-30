@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                                     </div>
                                 </div>
                                 <div class="output-frame-wrapper">
-                                    <iframe id="output-frame-${exampleId}" title="Resultado do Código"></iframe>
+                                    <iframe class= "output-frame-exampleId" id="output-frame-${exampleId}" title="Resultado do Código"></iframe>
                                 </div>
                             </div>
                         </div>
@@ -100,17 +100,24 @@ document.addEventListener('DOMContentLoaded', async function() {
         jsEditor.setValue(jsContent);
 
         const outputFrame = document.getElementById(`output-frame-${exampleId}`);
-        // CORREÇÃO: Quebra a tag </script> para evitar erro de parsing do navegador
         const source = `
-            <html>
-                <head><style>${cssContent}</style></head>
-                <body>${htmlContent}<script>${jsContent}</` + `script></body>
-            </html>
+            <html><head><style>${cssContent}</style></head>
+            <body>${htmlContent}<script>${jsContent}<\/script></body></html>
         `;
         const doc = outputFrame.contentWindow.document;
         doc.open();
         doc.write(source);
         doc.close();
+
+        // CORREÇÃO: Força o CodeMirror a redesenhar quando o acordeão é aberto
+        const collapseElement = accordionItem.querySelector('.accordion-collapse');
+        collapseElement.addEventListener('shown.bs.collapse', function () {
+            setTimeout(() => {
+                htmlEditor.refresh();
+                cssEditor.refresh();
+                jsEditor.refresh();
+            }, 10); // Um pequeno atraso garante que o layout foi calculado
+        });
 
         // Lógica dos botões de zoom
         const zoomInBtn = accordionItem.querySelector('.zoom-in-btn');
