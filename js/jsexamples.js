@@ -67,10 +67,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                     <div class="col-md-6 d-flex flex-column">
                         <div class="editor-header">
                              <ul class="nav nav-tabs editor-tabs">
-                                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#html-pane-${exampleId}">index.html</button></li>
-                                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#css-pane-${exampleId}">style.css</button></li>
-                                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#js-pane-${exampleId}">script.js</button></li>
+                                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#html-pane-${exampleId}" data-editor="html">index.html</button></li>
+                                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#css-pane-${exampleId}" data-editor="css">style.css</button></li>
+                                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#js-pane-${exampleId}" data-editor="js">script.js</button></li>
                             </ul>
+                            <button class="btn btn-outline-primary btn-sm download-btn" title="Exportar código da guia atual"><i class="bi bi-download"></i></button>
                         </div>
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="html-pane-${exampleId}"><textarea id="html-code-${exampleId}"></textarea></div>
@@ -79,7 +80,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                         </div>
                     </div>
                     <div class="col-md-6 d-flex flex-column">
-                         <div class="output-header"></div>
+                         <div class="output-header">
+                            <div class="output-controls d-flex align-items-center">
+                                <span class="me-2">Zoom:</span>
+                                <button class="btn btn-outline-secondary btn-sm zoom-out-btn"><i class="bi bi-zoom-out"></i></button>
+                                <button class="btn btn-outline-secondary btn-sm ms-1 zoom-in-btn"><i class="bi bi-zoom-in"></i></button>
+                            </div>
+                         </div>
                          <div class="output-frame-wrapper">
                             <iframe class="output-frame-full" title="Resultado do Código"></iframe>
                         </div>
@@ -109,7 +116,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Lógica para expandir
         wrapper.querySelector('.expand-btn').addEventListener('click', () => {
-            // Recolhe qualquer outro item que esteja expandido
             document.querySelectorAll('.example-card-wrapper.is-expanded').forEach(el => {
                 el.classList.remove('is-expanded');
                 el.classList.add('col-lg-4', 'col-md-6');
@@ -118,7 +124,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             wrapper.classList.add('is-expanded');
             wrapper.classList.remove('col-lg-4', 'col-md-6');
             
-            // Preenche o iframe da visualização expandida e refresca os editores
             const fullOutputFrame = wrapper.querySelector('.output-frame-full');
             const fullDoc = fullOutputFrame.contentWindow.document;
             fullDoc.open();
@@ -127,7 +132,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             setTimeout(() => {
                 Object.values(editors[exampleId]).forEach(editor => editor.refresh());
-            }, 200); // Atraso para garantir que a transição CSS terminou
+            }, 250); 
         });
 
         // Lógica para recolher
@@ -135,17 +140,29 @@ document.addEventListener('DOMContentLoaded', async function() {
             wrapper.classList.remove('is-expanded');
             wrapper.classList.add('col-lg-4', 'col-md-6');
         });
-    }
 
-    // Função principal para carregar tudo
-    async function loadAllExamples() {
-        const exampleFolders = await getExampleFolders();
-        if (exampleFolders.length === 0) {
-            examplesContainer.innerHTML = '<p class="text-center">Nenhum exemplo encontrado.</p>';
-            return;
-        }
-        exampleFolders.forEach(createExampleBlock);
-    }
+        // Força o CodeMirror a redesenhar quando uma ABA é mostrada
+        const tabs = wrapper.querySelectorAll('.editor-tabs .nav-link');
+        tabs.forEach(tab => {
+            tab.addEventListener('shown.bs.tab', function (event) {
+                const editorKey = event.target.getAttribute('data-editor');
+                if (editors[exampleId] && editors[exampleId][editorKey]) {
+                    editors[exampleId][editorKey].refresh();
+                }
+            });
+        });
 
-    loadAllExamples();
-});
+        // Lógica dos botões de zoom
+        const zoomInBtn = wrapper.querySelector('.zoom-in-btn');
+        const zoomOutBtn = wrapper.querySelector('.zoom-out-btn');
+        const fullOutputFrame = wrapper.querySelector('.output-frame-full');
+        let currentZoom = 1;
+        zoomInBtn.addEventListener('click', () => {
+            currentZoom += 0.1;
+            fullOutputFrame.style.transform = `scale(${currentZoom})`;
+        });
+        zoomOutBtn.addEventListener('click', () => {
+            if (currentZoom > 0.2) {
+                currentZoom -= 0.1;
+                fullOutputFrame.style.transform = `scale(${currentZoom})`;
+          
