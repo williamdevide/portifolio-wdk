@@ -1,17 +1,33 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     const examplesContainer = document.getElementById('examples-accordion');
-    
-    // Simulação da leitura de diretórios. Adicione o nome de novas pastas de exemplo aqui.
-    const exampleFolders = ['exemplo-01']; 
+
+    // Função para buscar a lista de exemplos do ficheiro JSON
+    async function getExampleFolders() {
+        try {
+            const response = await fetch('../examples/examples.json');
+            if (!response.ok) {
+                console.error('Ficheiro examples.json não encontrado.');
+                return [];
+            }
+            const data = await response.json();
+            return data.folders || [];
+        } catch (error) {
+            console.error('Erro ao ler o ficheiro examples.json:', error);
+            return [];
+        }
+    }
 
     // Função para buscar o conteúdo de um arquivo
     async function fetchFileContent(path) {
         try {
             const response = await fetch(path);
-            if (!response.ok) return ''; // Retorna string vazia se o arquivo não for encontrado
+            if (!response.ok) {
+                console.warn(`Arquivo não encontrado: ${path}`);
+                return ''; // Retorna string vazia se o arquivo não for encontrado
+            }
             return await response.text();
         } catch (error) {
-            console.error('Erro ao buscar arquivo:', error);
+            console.error(`Erro ao buscar o arquivo ${path}:`, error);
             return '';
         }
     }
@@ -87,6 +103,15 @@ document.addEventListener('DOMContentLoaded', function() {
         doc.close();
     }
 
-    // Carrega todos os exemplos
-    exampleFolders.forEach(createExampleBlock);
+    // Função principal para carregar tudo
+    async function loadAllExamples() {
+        const exampleFolders = await getExampleFolders();
+        if (exampleFolders.length === 0) {
+            examplesContainer.innerHTML = '<p class="text-center">Nenhum exemplo encontrado.</p>';
+            return;
+        }
+        exampleFolders.forEach(createExampleBlock);
+    }
+
+    loadAllExamples();
 });
