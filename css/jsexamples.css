@@ -4,28 +4,56 @@ JSExamples Page Stylesheet
 ==================================================
 */
 
-.accordion-button:not(.collapsed) {
-    color: var(--primary-color);
-    background-color: #e7f1ff;
+/* --- Estilos da Grelha de Cards --- */
+.example-card-wrapper {
+    transition: all 0.5s ease-in-out;
 }
 
-.accordion-body {
-    padding: 0; /* Remove padding to allow the tool wrapper to fit perfectly */
+.example-card {
+    cursor: pointer;
+    overflow: hidden;
+    height: 100%;
 }
 
-.example-wrapper {
-    background-color: #ffffff;
-    border: 1px solid rgba(0,0,0,.125);
-    border-top: none;
-    border-radius: 0 0 .5rem .5rem;
+.example-card .card-img-wrapper {
+    height: 200px;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+}
+
+.example-card iframe {
+    width: 100%;
+    height: 400px; /* Altura maior para que a parte visível seja útil */
+    transform: scale(0.5); /* Reduz o iframe para caber */
+    transform-origin: top left;
+    border: none;
+    pointer-events: none; /* Impede a interação com o iframe no card */
+}
+
+/* --- Estilos da Visualização Expandida --- */
+.example-expanded-view {
+    display: none; /* Oculto por defeito */
     padding: 1.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: .5rem;
+    background-color: #fff;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
 }
 
-.tool-container {
-    display: flex;
-    flex-direction: row;
+/* Quando um card é expandido */
+.example-card-wrapper.is-expanded {
+    width: 100% !important;
 }
 
+.example-card-wrapper.is-expanded .example-card {
+    display: none; /* Esconde o card */
+}
+
+.example-card-wrapper.is-expanded .example-expanded-view {
+    display: block; /* Mostra a visualização expandida */
+}
+
+/* --- Estilos do Editor e da Visualização (dentro da visualização expandida) --- */
 .editor-container, .output-container {
     height: 100%; 
     display: flex;
@@ -38,7 +66,7 @@ JSExamples Page Stylesheet
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.5rem;
-    min-height: 38px; /* Altura mínima para alinhar com os botões */
+    min-height: 38px;
 }
 
 .editor-tabs .nav-link {
@@ -73,17 +101,6 @@ JSExamples Page Stylesheet
     border-radius: 0 0 .25rem .25rem;
     font-size: 14px;
     min-height: 400px;
-    max-height: 400px;
-}
-
-.output-controls {
-    gap: 5px;
-}
-
-.output-controls span {
-    font-size: 0.9rem;
-    color: var(--secondary-color);
-    font-weight: 600;
 }
 
 .output-frame-wrapper {
@@ -92,19 +109,6 @@ JSExamples Page Stylesheet
     border: 1px solid #dee2e6;
     border-radius: .25rem;
     min-height: 400px;
-    max-height: 400px;
-}
-
-.output-frame-exampleId {
-    flex-grow: 1;
-    height: 100%;
-    border: 1px solid #dee2e6;
-    border-top: none;
-    border-radius: 0 0 .25rem .25rem;
-    font-size: 14px;
-    min-height: 400px;
-    max-height: 400px;
-    min-width: 600px;
 }
 
 #output-frame {
@@ -114,6 +118,4 @@ JSExamples Page Stylesheet
     background-color: #fff;
     transform-origin: top left;
     transition: transform 0.2s ease-in-out;
-    min-height: 400px;
-    max-height: 400px;
 }

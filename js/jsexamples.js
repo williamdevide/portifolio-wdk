@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    const examplesContainer = document.getElementById('examples-accordion');
+    const examplesContainer = document.getElementById('examples-container');
+    let editors = {}; // Armazena todas as instâncias do CodeMirror
 
     // Função para buscar a lista de exemplos do ficheiro JSON
     async function getExampleFolders() {
@@ -10,7 +11,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 return [];
             }
             const data = await response.json();
-            return data.folders || [];
+            // Ordena as pastas em ordem alfabética
+            return (data.folders || []).sort((a, b) => a.localeCompare(b));
         } catch (error) {
             console.error('Erro ao ler o ficheiro examples.json:', error);
             return [];
@@ -21,10 +23,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     async function fetchFileContent(path) {
         try {
             const response = await fetch(path);
-            if (!response.ok) {
-                console.warn(`Arquivo não encontrado: ${path}`);
-                return ''; // Retorna string vazia se o arquivo não for encontrado
-            }
+            if (!response.ok) return '';
             return await response.text();
         } catch (error) {
             console.error(`Erro ao buscar o arquivo ${path}:`, error);
@@ -32,155 +31,113 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    // Função para criar e inicializar um bloco de exemplo
+    // Função para criar e inicializar um bloco de exemplo (card + visualização expandida)
     async function createExampleBlock(folderName, index) {
         const exampleId = `example-${index}`;
-        
         const [htmlContent, cssContent, jsContent] = await Promise.all([
             fetchFileContent(`../examples/${folderName}/index.html`),
             fetchFileContent(`../examples/${folderName}/style.css`),
             fetchFileContent(`../examples/${folderName}/script.js`)
         ]);
 
-        const accordionItem = document.createElement('div');
-        accordionItem.className = 'accordion-item';
-        accordionItem.innerHTML = `
-            <h2 class="accordion-header" id="heading-${exampleId}">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${exampleId}" aria-expanded="${index === 0 ? 'true' : 'false'}" aria-controls="collapse-${exampleId}">
-                    ${folderName}
-                </button>
-            </h2>
-            <div id="collapse-${exampleId}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" aria-labelledby="heading-${exampleId}" data-bs-parent="#examples-accordion">
-                <div class="accordion-body">
-                    <div class="example-wrapper">
-                        <div class="row g-4">
-                            <!-- Coluna do Editor -->
-                            <div class="col-md-6 d-flex flex-column">
-                                <div class="editor-header">
-                                    <ul class="nav nav-tabs editor-tabs">
-                                        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#html-pane-${exampleId}" data-editor="html">index.html</button></li>
-                                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#css-pane-${exampleId}" data-editor="css">style.css</button></li>
-                                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#js-pane-${exampleId}" data-editor="js">script.js</button></li>
-                                    </ul>
-                                    <button class="btn btn-outline-primary btn-sm download-btn" title="Exportar código da guia atual"><i class="bi bi-download"></i></button>
-                                </div>
-                                <div class="tab-content">
-                                    <div class="tab-pane fade show active" id="html-pane-${exampleId}"><textarea id="html-code-${exampleId}"></textarea></div>
-                                    <div class="tab-pane fade" id="css-pane-${exampleId}"><textarea id="css-code-${exampleId}"></textarea></div>
-                                    <div class="tab-pane fade" id="js-pane-${exampleId}"><textarea id="js-code-${exampleId}"></textarea></div>
-                                </div>
-                            </div>
-                            <!-- Coluna da Visualização -->
-                            <div class="col-md-6 d-flex flex-column">
-                                <div class="output-header">
-                                    <div class="output-controls d-flex align-items-center">
-                                        <span class="me-2">Zoom:</span>
-                                        <button class="btn btn-outline-secondary btn-sm zoom-out-btn"><i class="bi bi-zoom-out"></i></button>
-                                        <button class="btn btn-outline-secondary btn-sm ms-1 zoom-in-btn"><i class="bi bi-zoom-in"></i></button>
-                                    </div>
-                                </div>
-                                <div class="output-frame-wrapper">
-                                    <iframe class="output-frame-exampleId" id="output-frame-${exampleId}" title="Resultado do Código"></iframe>
-                                </div>
-                            </div>
+        const wrapper = document.createElement('div');
+        wrapper.className = 'col-lg-4 col-md-6 mb-4 example-card-wrapper';
+        wrapper.id = `wrapper-${exampleId}`;
+
+        // Cria o card e a visualização expandida
+        wrapper.innerHTML = `
+            <!-- Card View -->
+            <div class="card h-100 shadow-sm example-card">
+                <div class="card-img-wrapper">
+                    <iframe scrolling="no" title="Preview for ${folderName}"></iframe>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">${folderName}</h5>
+                    <button class="btn btn-primary mt-auto expand-btn">Expandir</button>
+                </div>
+            </div>
+
+            <!-- Expanded View (Hidden by default) -->
+            <div class="example-expanded-view">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>${folderName}</h3>
+                    <button class="btn btn-secondary collapse-btn">Recolher</button>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-6 d-flex flex-column">
+                        <div class="editor-header">
+                             <ul class="nav nav-tabs editor-tabs">
+                                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#html-pane-${exampleId}">index.html</button></li>
+                                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#css-pane-${exampleId}">style.css</button></li>
+                                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#js-pane-${exampleId}">script.js</button></li>
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="html-pane-${exampleId}"><textarea id="html-code-${exampleId}"></textarea></div>
+                            <div class="tab-pane fade" id="css-pane-${exampleId}"><textarea id="css-code-${exampleId}"></textarea></div>
+                            <div class="tab-pane fade" id="js-pane-${exampleId}"><textarea id="js-code-${exampleId}"></textarea></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex flex-column">
+                         <div class="output-header"></div>
+                         <div class="output-frame-wrapper">
+                            <iframe class="output-frame-full" title="Resultado do Código"></iframe>
                         </div>
                     </div>
                 </div>
             </div>
         `;
-        examplesContainer.appendChild(accordionItem);
-
-        const editorOptions = { lineNumbers: true, theme: 'dracula', readOnly: true, lineWrapping: false };
-        const editors = {
-            html: CodeMirror.fromTextArea(document.getElementById(`html-code-${exampleId}`), { ...editorOptions, mode: 'xml', htmlMode: true }),
-            css: CodeMirror.fromTextArea(document.getElementById(`css-code-${exampleId}`), { ...editorOptions, mode: 'css' }),
-            js: CodeMirror.fromTextArea(document.getElementById(`js-code-${exampleId}`), { ...editorOptions, mode: 'javascript' })
-        };
-
-        editors.html.setValue(htmlContent);
-        editors.css.setValue(cssContent);
-        editors.js.setValue(jsContent);
-
-        const outputFrame = document.getElementById(`output-frame-${exampleId}`);
-        const source = `
-            <html><head><style>${cssContent}</style></head>
-            <body>${htmlContent}<script>${jsContent}<\/` + `script></body></html>
-        `;
-        const doc = outputFrame.contentWindow.document;
-        doc.open();
-        doc.write(source);
-        doc.close();
+        examplesContainer.appendChild(wrapper);
         
-        // CORREÇÃO: Força o CodeMirror a redesenhar quando uma ABA é mostrada
-        const tabs = accordionItem.querySelectorAll('.editor-tabs .nav-link');
-        tabs.forEach(tab => {
-            tab.addEventListener('shown.bs.tab', function (event) {
-                const editorKey = event.target.getAttribute('data-editor');
-                if (editors[editorKey]) {
-                    editors[editorKey].refresh();
-                }
+        // Preenche o iframe de preview no card
+        const previewFrame = wrapper.querySelector('.card-img-wrapper iframe');
+        const previewDoc = previewFrame.contentWindow.document;
+        previewDoc.open();
+        previewDoc.write(`<html><head><style>${cssContent}</style></head><body>${htmlContent}</body></html>`);
+        previewDoc.close();
+
+        // Inicializa os editores na visualização expandida
+        const editorOptions = { lineNumbers: true, theme: 'dracula', readOnly: true, lineWrapping: false };
+        editors[exampleId] = {
+            html: CodeMirror.fromTextArea(wrapper.querySelector(`#html-code-${exampleId}`), { ...editorOptions, mode: 'xml', htmlMode: true }),
+            css: CodeMirror.fromTextArea(wrapper.querySelector(`#css-code-${exampleId}`), { ...editorOptions, mode: 'css' }),
+            js: CodeMirror.fromTextArea(wrapper.querySelector(`#js-code-${exampleId}`), { ...editorOptions, mode: 'javascript' })
+        };
+        editors[exampleId].html.setValue(htmlContent);
+        editors[exampleId].css.setValue(cssContent);
+        editors[exampleId].js.setValue(jsContent);
+
+        // Lógica para expandir
+        wrapper.querySelector('.expand-btn').addEventListener('click', () => {
+            // Recolhe qualquer outro item que esteja expandido
+            document.querySelectorAll('.example-card-wrapper.is-expanded').forEach(el => {
+                el.classList.remove('is-expanded');
+                el.classList.add('col-lg-4', 'col-md-6');
             });
-        });
-
-        // Força o CodeMirror a redesenhar quando o ACORDEÃO é aberto
-        const collapseElement = accordionItem.querySelector('.accordion-collapse');
-        collapseElement.addEventListener('shown.bs.collapse', function () {
+            
+            wrapper.classList.add('is-expanded');
+            wrapper.classList.remove('col-lg-4', 'col-md-6');
+            
+            // Preenche o iframe da visualização expandida e refresca os editores
+            const fullOutputFrame = wrapper.querySelector('.output-frame-full');
+            const fullDoc = fullOutputFrame.contentWindow.document;
+            fullDoc.open();
+            fullDoc.write(`<html><head><style>${cssContent}</style></head><body>${htmlContent}<script>${jsContent}<\/` + `script></body></html>`);
+            fullDoc.close();
+            
             setTimeout(() => {
-                Object.values(editors).forEach(editor => editor.refresh());
-            }, 10);
+                Object.values(editors[exampleId]).forEach(editor => editor.refresh());
+            }, 200); // Atraso para garantir que a transição CSS terminou
         });
 
-        // Lógica dos botões de zoom
-        const zoomInBtn = accordionItem.querySelector('.zoom-in-btn');
-        const zoomOutBtn = accordionItem.querySelector('.zoom-out-btn');
-        let currentZoom = 1;
-        zoomInBtn.addEventListener('click', () => {
-            currentZoom += 0.1;
-            outputFrame.style.transform = `scale(${currentZoom})`;
-        });
-        zoomOutBtn.addEventListener('click', () => {
-            if (currentZoom > 0.2) {
-                currentZoom -= 0.1;
-                outputFrame.style.transform = `scale(${currentZoom})`;
-            }
-        });
-
-        // Lógica do botão de download
-        const downloadBtn = accordionItem.querySelector('.download-btn');
-        downloadBtn.addEventListener('click', () => {
-            const activeTab = accordionItem.querySelector('.editor-tabs .nav-link.active');
-            let content = '';
-            let filename = '';
-            let mimeType = 'text/plain';
-
-            if (activeTab.textContent === 'index.html') {
-                content = editors.html.getValue();
-                filename = 'index.html';
-                mimeType = 'text/html';
-            } else if (activeTab.textContent === 'style.css') {
-                content = editors.css.getValue();
-                filename = 'style.css';
-                mimeType = 'text/css';
-            } else if (activeTab.textContent === 'script.js') {
-                content = editors.js.getValue();
-                filename = 'script.js';
-                mimeType = 'application/javascript';
-            }
-
-            if (content.trim() === '') return;
-
-            const blob = new Blob([content], { type: mimeType });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+        // Lógica para recolher
+        wrapper.querySelector('.collapse-btn').addEventListener('click', () => {
+            wrapper.classList.remove('is-expanded');
+            wrapper.classList.add('col-lg-4', 'col-md-6');
         });
     }
 
+    // Função principal para carregar tudo
     async function loadAllExamples() {
         const exampleFolders = await getExampleFolders();
         if (exampleFolders.length === 0) {
