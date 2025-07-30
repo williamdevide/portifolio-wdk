@@ -95,7 +95,7 @@ JSExamples Page Stylesheet
     max-height: 400px;
 }
 
-#output-frame-exampleId {
+.output-frame-exampleId {
     flex-grow: 1;
     height: 100%;
     border: 1px solid #dee2e6;
