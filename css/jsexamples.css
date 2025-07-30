@@ -33,6 +33,13 @@ JSExamples Page Stylesheet
     overflow: hidden; 
 }
 
+.editor-header, .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
 .editor-tabs .nav-link {
     color: var(--secondary-color);
     font-weight: 600;
@@ -58,19 +65,35 @@ JSExamples Page Stylesheet
 }
 
 .CodeMirror {
-    flex-grow: 1;
-    height: 100%;
+    height: 400px; /* Altura fixa para o editor */
     border: 1px solid #dee2e6;
     border-top: none;
     border-radius: 0 0 .25rem .25rem;
     font-size: 14px;
 }
 
+.output-controls {
+    gap: 5px;
+}
+
+.output-controls span {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.output-frame-wrapper {
+    flex-grow: 1;
+    overflow: auto;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+}
+
 #output-frame {
     width: 100%;
     height: 100%;
-    border: 1px solid #dee2e6;
-    border-radius: .25rem;
+    border: none;
     background-color: #fff;
-    min-height: 450px;
+    transform-origin: top left;
+    transition: transform 0.2s ease-in-out;
 }
