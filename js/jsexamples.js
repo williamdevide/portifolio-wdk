@@ -165,4 +165,54 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (currentZoom > 0.2) {
                 currentZoom -= 0.1;
                 fullOutputFrame.style.transform = `scale(${currentZoom})`;
-          
+            }
+        });
+
+        // Lógica do botão de download
+        const downloadBtn = wrapper.querySelector('.download-btn');
+        downloadBtn.addEventListener('click', () => {
+            const activeTab = wrapper.querySelector('.editor-tabs .nav-link.active');
+            let content = '';
+            let filename = '';
+            let mimeType = 'text/plain';
+
+            if (activeTab.textContent === 'index.html') {
+                content = editors[exampleId].html.getValue();
+                filename = 'index.html';
+                mimeType = 'text/html';
+            } else if (activeTab.textContent === 'style.css') {
+                content = editors[exampleId].css.getValue();
+                filename = 'style.css';
+                mimeType = 'text/css';
+            } else if (activeTab.textContent === 'script.js') {
+                content = editors[exampleId].js.getValue();
+                filename = 'script.js';
+                mimeType = 'application/javascript';
+            }
+
+            if (content.trim() === '') return;
+
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    }
+
+    // Função principal para carregar tudo
+    async function loadAllExamples() {
+        const exampleFolders = await getExampleFolders();
+        if (exampleFolders.length === 0) {
+            examplesContainer.innerHTML = '<p class="text-center">Nenhum exemplo encontrado.</p>';
+            return;
+        }
+        exampleFolders.forEach(createExampleBlock);
+    }
+
+    loadAllExamples();
+});
