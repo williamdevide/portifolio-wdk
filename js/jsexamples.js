@@ -58,9 +58,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                             <div class="col-md-6 d-flex flex-column">
                                 <div class="editor-header">
                                     <ul class="nav nav-tabs editor-tabs">
-                                        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#html-pane-${exampleId}">index.html</button></li>
-                                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#css-pane-${exampleId}">style.css</button></li>
-                                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#js-pane-${exampleId}">script.js</button></li>
+                                        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#html-pane-${exampleId}" data-editor="html">index.html</button></li>
+                                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#css-pane-${exampleId}" data-editor="css">style.css</button></li>
+                                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#js-pane-${exampleId}" data-editor="js">script.js</button></li>
                                     </ul>
                                     <button class="btn btn-outline-primary btn-sm download-btn" title="Exportar código da guia atual"><i class="bi bi-download"></i></button>
                                 </div>
@@ -91,32 +91,43 @@ document.addEventListener('DOMContentLoaded', async function() {
         examplesContainer.appendChild(accordionItem);
 
         const editorOptions = { lineNumbers: true, theme: 'dracula', readOnly: true, lineWrapping: false };
-        const htmlEditor = CodeMirror.fromTextArea(document.getElementById(`html-code-${exampleId}`), { ...editorOptions, mode: 'xml', htmlMode: true });
-        const cssEditor = CodeMirror.fromTextArea(document.getElementById(`css-code-${exampleId}`), { ...editorOptions, mode: 'css' });
-        const jsEditor = CodeMirror.fromTextArea(document.getElementById(`js-code-${exampleId}`), { ...editorOptions, mode: 'javascript' });
+        const editors = {
+            html: CodeMirror.fromTextArea(document.getElementById(`html-code-${exampleId}`), { ...editorOptions, mode: 'xml', htmlMode: true }),
+            css: CodeMirror.fromTextArea(document.getElementById(`css-code-${exampleId}`), { ...editorOptions, mode: 'css' }),
+            js: CodeMirror.fromTextArea(document.getElementById(`js-code-${exampleId}`), { ...editorOptions, mode: 'javascript' })
+        };
 
-        htmlEditor.setValue(htmlContent);
-        cssEditor.setValue(cssContent);
-        jsEditor.setValue(jsContent);
+        editors.html.setValue(htmlContent);
+        editors.css.setValue(cssContent);
+        editors.js.setValue(jsContent);
 
         const outputFrame = document.getElementById(`output-frame-${exampleId}`);
         const source = `
             <html><head><style>${cssContent}</style></head>
-            <body>${htmlContent}<script>${jsContent}<\/script></body></html>
+            <body>${htmlContent}<script>${jsContent}<\/` + `script></body></html>
         `;
         const doc = outputFrame.contentWindow.document;
         doc.open();
         doc.write(source);
         doc.close();
+        
+        // CORREÇÃO: Força o CodeMirror a redesenhar quando uma ABA é mostrada
+        const tabs = accordionItem.querySelectorAll('.editor-tabs .nav-link');
+        tabs.forEach(tab => {
+            tab.addEventListener('shown.bs.tab', function (event) {
+                const editorKey = event.target.getAttribute('data-editor');
+                if (editors[editorKey]) {
+                    editors[editorKey].refresh();
+                }
+            });
+        });
 
-        // CORREÇÃO: Força o CodeMirror a redesenhar quando o acordeão é aberto
+        // Força o CodeMirror a redesenhar quando o ACORDEÃO é aberto
         const collapseElement = accordionItem.querySelector('.accordion-collapse');
         collapseElement.addEventListener('shown.bs.collapse', function () {
             setTimeout(() => {
-                htmlEditor.refresh();
-                cssEditor.refresh();
-                jsEditor.refresh();
-            }, 10); // Um pequeno atraso garante que o layout foi calculado
+                Object.values(editors).forEach(editor => editor.refresh());
+            }, 10);
         });
 
         // Lógica dos botões de zoom
@@ -143,15 +154,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             let mimeType = 'text/plain';
 
             if (activeTab.textContent === 'index.html') {
-                content = htmlEditor.getValue();
+                content = editors.html.getValue();
                 filename = 'index.html';
                 mimeType = 'text/html';
             } else if (activeTab.textContent === 'style.css') {
-                content = cssEditor.getValue();
+                content = editors.css.getValue();
                 filename = 'style.css';
                 mimeType = 'text/css';
             } else if (activeTab.textContent === 'script.js') {
-                content = jsEditor.getValue();
+                content = editors.js.getValue();
                 filename = 'script.js';
                 mimeType = 'application/javascript';
             }
