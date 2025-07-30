@@ -104,7 +104,7 @@ JSExamples Page Stylesheet
     font-size: 14px;
     min-height: 400px;
     max-height: 400px;
-    min-width: 800px;
+    min-width: 600px;
 }
 
 #output-frame {
@@ -114,6 +114,6 @@ JSExamples Page Stylesheet
     background-color: #fff;
     transform-origin: top left;
     transition: transform 0.2s ease-in-out;
-    min-height: 350px;
-    max-height: 350px;
+    min-height: 400px;
+    max-height: 400px;
 }
